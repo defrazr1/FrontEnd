@@ -11,10 +11,61 @@ function loadData() {
     $wikiElem.text("");
     $nytElem.text("");
 
-    // load streetview
+    var streetInput = $('#street').val();
+    var cityInput = $('#city').val();
+    var address = streetInput + ', ' + cityInput;
 
-    // YOUR CODE GOES HERE!
+    var streetViewURL = 
+     'http://maps.googleapis.com/maps/api/streetview?size=600x300&location=' +
+     address + '';
 
+    $body.append('<img class="bgimg" src="' + streetViewURL + '">');
+
+
+    var URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+    URL += '?' + $.param(
+        {
+            'q': cityInput,
+            'api-key': "7a588d2f5cda43d09c2c948e059feb9a",
+        });
+    
+    $.getJSON(URL, function(data) {
+        var articles = data.response.docs;
+        $.each(articles, function(key, val) {
+            var article = articles[key];
+            $nytElem.append('<li class="article">' +
+                '<a href="' + article.web_url +'">' +
+                article.headline.main +
+                    '</a>'+
+                '<p>' + article.snippet + '</p>' +
+            '</li>');
+        });
+    })
+
+    //         $('.append('<li id="' + key + '">' + val + '</li>');
+    //     });
+
+    //     $( '<ul/>', {
+    //         'class': 'article-list',
+    //         html: items.join('') 
+    //     }).appendTo($nytElem);
+    // });
+
+//     $.getJSON( "ajax/test.json", function( data ) {
+//   var items = [];
+//   $.each( data, function( key, val ) {
+//     items.push( "<li id='" + key + "'>" + val + "</li>" );
+//   });
+ 
+//   $( "<ul/>", {
+//     "class": "my-new-list",
+//     html: items.join( "" )
+//   }).appendTo( "body" );
+// });
+
+
+
+    
     return false;
 };
 
