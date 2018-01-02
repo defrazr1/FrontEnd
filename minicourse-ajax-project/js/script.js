@@ -45,27 +45,26 @@ function loadData() {
         $nytHeaderElem.text('New York Times Articles Could Not Be Loaded');
     })
 
-    //         $('.append('<li id="' + key + '">' + val + '</li>');
-    //     });
+    //Wikipedia Links
+    var wikiURL = 'http://en.wikipedia.org/w/api.php?action=opensearch' +
+                  '&search=' + cityInput + '&format=json&callback=' +
+                  'wikiCallback';
 
-    //     $( '<ul/>', {
-    //         'class': 'article-list',
-    //         html: items.join('') 
-    //     }).appendTo($nytElem);
-    // });
-
-//     $.getJSON( "ajax/test.json", function( data ) {
-//   var items = [];
-//   $.each( data, function( key, val ) {
-//     items.push( "<li id='" + key + "'>" + val + "</li>" );
-//   });
- 
-//   $( "<ul/>", {
-//     "class": "my-new-list",
-//     html: items.join( "" )
-//   }).appendTo( "body" );
-// });
-
+    //Wikipedia AJAX Call
+    $.ajax({
+        url: wikiURL,
+        dataType: "jsonp",
+        success: function(response) {
+            console.log(response);
+            var articleList = response[1];
+            $.each(articleList, function(key) {
+                var articleStr = articleList[key];
+                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href="' + url + '">' + articleStr +
+                '</a></li>');
+            });
+        }
+    });
 
 
     
